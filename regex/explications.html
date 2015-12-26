@@ -1,0 +1,515 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+
+
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-19440362-1']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
+
+  
+  
+  
+  <title>expressions r&eacute;guli&egrave;res 1</title>
+</head>
+
+
+<body>
+
+<h2 style="font-family: Helvetica,Arial,sans-serif;">Expressions R&eacute;guli&egrave;res</h2>
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<span style="font-family: Helvetica,Arial,sans-serif;">Cette page sert &agrave; jouer avec les expressions r&eacute;guli&egrave;res. </span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<big><span style="font-family: Helvetica,Arial,sans-serif; text-decoration: underline;">Sur la page, vous avez plusieurs champs :</span></big><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<ul style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>Un champ de texte pour coller le texte que vous souhaitez utiliser comme texte d'analyse.</li>
+
+  <li>Un bouton "Ziva !" &nbsp;pour lancer l'application des
+expressions r&eacute;guli&egrave;res sur le texte d'analyse (la touche
+"Entr&eacute;e" quand vous &ecirc;tes dans un champ d'expression
+r&eacute;guli&egrave;re a le m&ecirc;me effet).</li>
+
+  <li>Un lien pour ouvrir les options. En particulier, vous pouvez vous
+faire indiquer les fronti&egrave;res des correspondances (sinon les
+correspondances sont tout simpl&eacute;ment marqu&eacute;es en bleues
+et en gras). Vous pouvez m&ecirc;me changer le symbole utilis&eacute;
+pour indiquer ces fronti&egrave;res.</li>
+
+  <li>Le texte nettoy&eacute; et "espac&eacute;" (comme il sera
+utilis&eacute; pour l'application des expressions
+r&eacute;guli&egrave;res).</li>
+
+  <li>Un premier champ entour&eacute; d'une ligne rouge contenant une
+expression r&eacute;guli&egrave;re (style perl ou python) suivi du
+r&eacute;sultat de l'application de cette expression
+r&eacute;guli&egrave;re sur le texte nettoy&eacute;. Au d&eacute;but ce
+champ contient une expression r&eacute;guli&egrave;re correspondant
+&agrave; la lettre a, b ou c.</li>
+
+  <li>Ensuite vous avez encore deux autres champs identique pour tester les expressions r&eacute;guli&egrave;res.&nbsp;</li>
+
+  <li>Les r&eacute;sultats du dernier cadre rouge s'affichent un peu
+diff&eacute;remment : seul la fronti&egrave;re du d&eacute;but est
+affich&eacute;e. Le but de l'exercice est de trouver une expression
+r&eacute;guli&egrave;re, assez complexe, qui trouve des
+fronti&egrave;res entre des segments de texte (les <a href="http://en.wikipedia.org/wiki/Chunking_%28computational_linguistics%29" target="_blank">chunks</a>)</li>
+
+</ul>
+
+<big><span style="font-family: Helvetica,Arial,sans-serif; text-decoration: underline;">Pour faire l'exercice, proc&eacute;dez de mani&egrave;re suivante:</span></big><br style="font-family: Helvetica,Arial,sans-serif;">
+
+<ol style="font-family: Helvetica,Arial,sans-serif;">
+
+  <li>Comprendre le r&eacute;sultat pour la premi&egrave;re expression r&eacute;guli&egrave;re.</li>
+
+  <li>Tester d'autres expressions r&eacute;guli&egrave;res comme indiqu&eacute; dans la liste bleue en bas de cette page.</li>
+
+  <li>Trouver un expression r&eacute;guli&egrave;re qui trouve les
+pr&eacute;positions dans le texte (et dans d'autres textes que vous
+avez choisis par hasard).</li>
+
+  <li>Faire de m&ecirc;me pour les d&eacute;terminants potentiels.
+    <br>
+Attention &agrave; l'ambiguit&eacute; des clitiques &agrave;
+l'accusatif (le, la, les) et au datif (leur) : Tentez des solutions
+ad-hoc pour &eacute;viter des mauvais correspondances. Pourquoi est-ce
+si difficile ? (Ne passez pas trop de temps avec ce probl&egrave;me :
+laissez persister quelques erreurs potentielles :-) )</li>
+
+  <li>Combiner les deux expressions trouv&eacute;es sous 3. et 4. pour
+trouver une expression complexe qui reconna&icirc;t les
+fronti&egrave;res entre les segments (chunks).</li>
+
+</ol>
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<big style="font-family: Helvetica,Arial,sans-serif;"><span style="text-decoration: underline;">Autres choses &agrave; essayer :</span><br>
+
+
+<br>
+
+
+</big>
+
+
+
+
+<big style="font-family: Helvetica,Arial,sans-serif;">
+
+  </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+      </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+    </big><big style="font-family: Helvetica,Arial,sans-serif;">
+
+  </big>
+  <big style="font-family: Helvetica,Arial,sans-serif;">
+  </big>
+<table style="background-color: rgb(225, 246, 241); width: 100%; text-align: left; margin-left: auto; margin-right: auto; font-family: Helvetica,Arial,sans-serif;" border="0">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">.</td>
+
+
+      <td>&nbsp;reconnait un (seul) caract&egrave;re
+quelconque (sauf \\n)</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">c*</td>
+
+
+      <td> un nombre quelconque (meme 0) de "c"
+cons&eacute;cutifs<br>
+
+
+
+
+tester "+" au lieu de "*"</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td><span style="font-weight: bold;">a?n</span></td>
+
+
+      <td>comprendre cette expression</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">e.*?t</td>
+
+
+      <td>tester et comprendre&nbsp; par rapport &agrave;
+e.*t</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">e.*t</td>
+
+
+      <td></td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">[abc]</td>
+
+
+      <td>&nbsp;recherche L'UN (exclusivement) des
+caract&egrave;res dans l'ensemble entre crochets</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">[^abc]</td>
+
+
+      <td>recherche dans le compl&eacute;mentaire de
+l'ensemble des caract&egrave;res</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">[a-z] </td>
+
+
+      <td>un caract&egrave;re quelconque situ&eacute;
+dans la liste (ici une lettre minuscule non accentu&eacute;e)</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">[abc]*</td>
+
+
+      <td> un nombre quelconque (meme 0) de lettres minuscules
+cons&eacute;cutives</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;"> [0-9]+ </td>
+
+
+      <td> au moins un chiffre</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">[a-z]{5} </td>
+
+
+      <td>trouve 5 lettres cons&eacute;cutifs sans accent </td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;"> \binfo\b </td>
+
+
+      <td> trouve le mot "info" bord&eacute;
+&eacute;ventuellement par des espaces</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;">\bc.*?\b</td>
+
+
+      <td>trouve le mot qui commence avec un c</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td style="font-weight: bold;"></td>
+
+
+      <td>d&eacute;terminer aussi les expressions pour
+trouver tous les mots terminant en "s", <br>
+
+
+
+
+tous les mots contenant un "e",<br>
+
+
+
+
+contenant un "e" et un "l", <br>
+
+
+
+
+contenant un "e" et un "l", le "e" pr&eacute;c&eacute;dant le
+"l", <br>
+
+
+
+
+contenant un "l" mais pas au d&eacute;but de mot,</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td><span style="font-weight: bold;">a|b</span></td>
+
+
+      <td>a ou b</td>
+
+
+      </tr>
+
+
+    <tr>
+
+
+      <td></td>
+
+
+      <td>d&eacute;terminer aussi les expressions pour
+trouver tous les mots terminant en "s", en "ion" ou en "x",<br>
+
+
+
+
+tous les mots commen&ccedil;ant avec un "l", en "e" ou en "b" et
+qui ne termine pas en "s"</td>
+
+
+      </tr>
+
+
+    
+  
+  </tbody>
+</table>
+
+
+<br style="font-family: Helvetica,Arial,sans-serif;">
+
+<span style="font-family: Helvetica,Arial,sans-serif;">
+N'h&eacute;sitez pas d'essayer tout ce qui est imaginable (par exemple
+mettre des parenth&egrave;ses autour des expressions, mettre des
+espaces,...)</span><br style="font-family: Helvetica,Arial,sans-serif;">
+
+
+
+
+</body>
+</html>

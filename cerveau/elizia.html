@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Generator" content="Kate, the KDE Advanced Text Editor" />
+<title>index.cgi</title>
+</head>
+<body>
+<pre>
+<span style="font-style: italic;color: #808080;">#!/usr/bin/python</span>
+<span style="font-style: italic;color: #808080;"># -*- coding: iso-8859-1 -*-</span>
+
+<span style="font-style: italic;color: #808080;">####</span>
+<span style="font-style: italic;color: #808080;"># Copyright (C) 2006, 2007 Kim Gerdes</span>
+<span style="font-style: italic;color: #808080;"># kim AT gerdes.fr</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># This program is free software; you can redistribute it and/or</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># modify it under the terms of the GNU General Public License</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># as published by the Free Software Foundation; either version 2</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># of the License, or (at your option) any later version.</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># This script is distributed in the hope that it will be useful,</span>
+<span style="font-style: italic;color: #808080;"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="font-style: italic;color: #808080;"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE</span>
+<span style="font-style: italic;color: #808080;"># See the GNU General Public License (www.gnu.org) for more details.</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># You can retrieve a copy of the GNU General Public License</span>
+<span style="font-style: italic;color: #808080;"># from http://www.gnu.org/.  For a copy via US Mail, write to the</span>
+<span style="font-style: italic;color: #808080;">#     Free Software Foundation, Inc.</span>
+<span style="font-style: italic;color: #808080;">#     59 Temple Place - Suite 330,</span>
+<span style="font-style: italic;color: #808080;">#     Boston, MA  02111-1307</span>
+<span style="font-style: italic;color: #808080;">#     USA</span>
+<span style="font-style: italic;color: #808080;">####</span>
+
+<span style="color: #ff00ff;">import</span><span style="color: #000000;"> time, cgitb, cgi, Cookie, os</span>
+<span style="color: #ff00ff;">import</span><span style="color: #000000;"> session</span>
+<span style="color: #ff00ff;">from</span><span style="color: #000000;"> analyste </span><span style="color: #ff00ff;">import</span><span style="color: #000000;"> Elizia</span>
+
+<span style="font-style: italic;color: #808080;"># web debug output:</span>
+<span style="color: #000000;">cgitb.enable</span><span style="color: #ff00ff;">()</span>
+
+<span style="color: #000000;">machine </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"elizia.net"</span>
+<span style="color: #000000;">cefichier </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"index.cgi"</span>
+<span style="color: #000000;">stylesheet </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"/eliziastyle.css"</span><span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># avec chemin depuis machine</span>
+
+<span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> connaissance</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">total_seconds</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;">""" 	traduit un nombre de secondes</span>
+<span style="font-style: italic;color: #808080;">		en phrase de durée</span>
+<span style="font-style: italic;color: #808080;">	"""</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> total_seconds </span><span style="color: #ff00ff;">&lt;</span><span style="color: #0000ff;">1</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"On est en train de faire connaissance"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		seconds </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_seconds </span><span style="color: #ff00ff;">%</span><span style="color: #000000;"> </span><span style="color: #0000ff;">60</span>
+<span style="color: #000000;">		total_minutes </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_seconds </span><span style="color: #ff00ff;">/</span><span style="color: #000000;"> </span><span style="color: #0000ff;">60</span>
+<span style="color: #000000;">		minutes </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_minutes </span><span style="color: #ff00ff;">%</span><span style="color: #000000;"> </span><span style="color: #0000ff;">60</span>
+<span style="color: #000000;">		total_hours </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_minutes </span><span style="color: #ff00ff;">/</span><span style="color: #000000;"> </span><span style="color: #0000ff;">60</span>
+<span style="color: #000000;">		hours </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_hours </span><span style="color: #ff00ff;">%</span><span style="color: #000000;"> </span><span style="color: #0000ff;">24</span>
+<span style="color: #000000;">		total_days </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_hours </span><span style="color: #ff00ff;">/</span><span style="color: #000000;"> </span><span style="color: #0000ff;">24</span>
+<span style="color: #000000;">		days </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_days </span><span style="color: #ff00ff;">%</span><span style="color: #000000;"> </span><span style="color: #0000ff;">365</span>
+<span style="color: #000000;">		years </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> total_days </span><span style="color: #ff00ff;">/</span><span style="color: #000000;"> </span><span style="color: #0000ff;">365</span>
+<span style="color: #000000;">		text </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"On se connait depuis plus de "</span>
+<span style="color: #000000;">		per </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">[</span><span style="color: #000000;">years, days, hours, minutes, seconds</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">		pernom </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">'année'</span><span style="color: #000000;">, </span><span style="color: #dd0000;">'mois'</span><span style="color: #000000;">, </span><span style="color: #dd0000;">'heure'</span><span style="color: #000000;">, </span><span style="color: #dd0000;">'minute'</span><span style="color: #000000;">, </span><span style="color: #dd0000;">'seconde'</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> i </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> </span><span style="color: #800000;">range</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">len</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">per</span><span style="color: #ff00ff;">)):</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> per</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;">  </span>
+<span style="color: #000000;">				text</span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #800000;">str</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">per</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">])</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" "</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">pernom</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> per</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]&gt;</span><span style="color: #0000ff;">1</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> text</span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"s"</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">break</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> text</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">". Ça va déjà mieux ?"</span>
+<span style="color: #000000;">	</span>
+
+
+<span style="color: #000000;">sess </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> session.Session</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">expires</span><span style="color: #ff00ff;">=</span><span style="color: #0000ff;">365</span><span style="color: #ff00ff;">*</span><span style="color: #0000ff;">24</span><span style="color: #ff00ff;">*</span><span style="color: #0000ff;">60</span><span style="color: #ff00ff;">*</span><span style="color: #0000ff;">60</span><span style="color: #000000;">, cookie_path</span><span style="color: #ff00ff;">=</span><span style="color: #dd0000;">'/'</span><span style="color: #ff00ff;">)</span>
+<span style="font-style: italic;color: #808080;"># expires can be reset at any moment: sess.set_expires('') </span>
+<span style="font-style: italic;color: #808080;"># or changed: sess.set_expires(30*24*60*60) Session data is a dictionary like object</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> sess.cookie</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Content-Type: text/html\n"</span><span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># blank line : end of headers</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"""&lt;html&gt;</span>
+<span style="color: #dd0000;">	&lt;head&gt;&lt;title&gt; ElizIA &lt;/title&gt;</span>
+<span style="color: #dd0000;">	&lt;META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1"&gt;"""</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;">	</span><span style="color: #dd0000;">'&lt;link href="http://'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> machine </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> stylesheet</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">'" rel="stylesheet" type="text/css"&gt;&lt;/head&gt;'</span>
+
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;body OnLoad='document.entree.probleme.focus();'&gt; "</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"""&lt;div id="analyzebox"&gt;"""</span>
+
+<span style="font-style: italic;color: #808080;">#print """&lt;/div&gt;"""	</span>
+<span style="color: #000000;">	</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;h2&gt; Relaxez-vous - vous êtes chez Elizia &lt;/h2&gt;"</span>
+
+<span style="color: #000000;">e </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> Elizia</span><span style="color: #ff00ff;">()</span>
+
+<span style="color: #000000;">DBmessage </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> e.linguist.dataBaseStatus</span>
+
+<span style="color: #000000;">form </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> cgi.FieldStorage</span><span style="color: #ff00ff;">()</span>
+<span style="color: #000000;">probleme </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">""</span>
+<span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> form.has_key</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"probleme"</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">	probleme </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> form</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"probleme"</span><span style="color: #ff00ff;">]</span><span style="color: #000000;">.value</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p class = 'vous'&gt;Vous :"</span><span style="color: #000000;">,probleme,</span><span style="color: #dd0000;">"&lt;/p&gt;"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p class = 'elizia'&gt;Elizia :"</span><span style="color: #000000;">,e.analyse</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">probleme,sess</span><span style="color: #ff00ff;">)</span><span style="color: #000000;">,</span><span style="color: #dd0000;">"&lt;/p&gt;"</span>
+<span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;">  </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> os.environ.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"HTTP_REFERER"</span><span style="color: #000000;">, </span><span style="color: #dd0000;">"&lt;not present&gt;"</span><span style="color: #ff00ff;">)</span><span style="color: #000000;">.endswith</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"elizia.cgi"</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p class = 'vous'&gt;Vous :"</span><span style="color: #000000;">,probleme,</span><span style="color: #dd0000;">"&lt;/p&gt;"</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p class = 'elizia'&gt;Elizia :"</span><span style="color: #000000;">,e.analyse</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">probleme,sess</span><span style="color: #ff00ff;">)</span><span style="color: #000000;">,</span><span style="color: #dd0000;">"&lt;/p&gt;"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> </span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p class = 'elizia'&gt;Elizia : Mettez-vous à l'aise et parlez-moi ouvertement de vos problèmes !&lt;/p&gt;"</span>
+<span style="color: #000000;">	</span>
+<span style="font-style: italic;color: #808080;"># mettre le champ d'entrée</span>
+<span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">not</span><span style="color: #000000;"> e.fini</span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;form method="post" action="'</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">cefichier</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">'" name="entree"&gt;&lt;input name="probleme" class="probleme" &gt;&lt;/form&gt;'</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;/div&gt;&lt;br&gt;"</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;div id="tetebox"&gt;&lt;/div&gt;'</span>
+
+<span style="font-style: italic;color: #808080;"># history</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;div class="history"&gt;'</span>
+
+
+<span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"memoireReponses"</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> sess.data.keys</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p&gt;&lt;b&gt;&lt;u&gt;Historique de votre thérapie :&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> i </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> </span><span style="color: #800000;">range</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">len</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireReponses"</span><span style="color: #ff00ff;">])):</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;">  </span><span style="color: #dd0000;">"&lt;p&gt;&lt;span class = 'temps'&gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">time.asctime</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.localtime</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">float</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireTemps"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">])))</span><span style="color: #000000;">,</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" : &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span class = 'vous'&gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireinputsPatient"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]+</span><span style="color: #dd0000;">" &lt;/span&gt;-&lt;span class = 'elizia'&gt; "</span><span style="color: #000000;">,</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireReponses"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]</span><span style="color: #000000;">,</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;/span&gt;&lt;/p&gt;"</span>
+<span style="color: #000000;">		</span>
+<span style="color: #000000;">	</span>
+
+<span style="color: #000000;">firstvisit </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> sess.data.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">'firstvisit'</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">lastvisit </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> sess.data.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">'lastvisit'</span><span style="color: #ff00ff;">)</span>
+<span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> firstvisit </span><span style="font-weight: bold;color: #000000;">and</span><span style="color: #000000;"> lastvisit </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> </span>
+<span style="color: #000000;">	therapyduration </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">float</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">lastvisit</span><span style="color: #ff00ff;">)-</span><span style="color: #800000;">float</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">firstvisit</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p&gt;"</span><span style="color: #000000;">, connaissance</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">int</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">therapyduration</span><span style="color: #ff00ff;">))</span><span style="color: #000000;">,</span><span style="color: #dd0000;">"&lt;/p&gt;"</span>
+<span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> </span>
+<span style="color: #000000;">	therapyduration </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">float</span><span style="color: #ff00ff;">(</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	message </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;p&gt;New session&lt;/p&gt;'</span>
+<span style="color: #000000;">	sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">'firstvisit'</span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">repr</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.time</span><span style="color: #ff00ff;">())</span>
+<span style="color: #000000;">	firstvisit </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">repr</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.time</span><span style="color: #ff00ff;">())</span>
+<span style="color: #000000;">	lastvisit </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">repr</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.time</span><span style="color: #ff00ff;">())</span>
+
+<span style="font-style: italic;color: #808080;"># Save lastvisit in the session</span>
+<span style="color: #000000;">sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">'lastvisit'</span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">repr</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.time</span><span style="color: #ff00ff;">())</span>
+<span style="color: #000000;">ipnum </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> os.environ.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"REMOTE_ADDR"</span><span style="color: #000000;">, </span><span style="color: #dd0000;">"&lt;not present&gt;"</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">sess.data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">'ipnum'</span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> ipnum</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;/div&gt;'</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"""&lt;div id="bottombox"&gt;&lt;a  href="http://"""</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">machine</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">"""/cerveau"&gt;Le cerveau d'Elizia&lt;/a&gt;</span>
+<span style="color: #dd0000;">	&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href="supervision.cgi"&gt;La supervision&lt;/a&gt; </span>
+<span style="color: #dd0000;">	&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href="regex"&gt;Un exercice sur les expressions régulières&lt;/a&gt; 		</span>
+<span style="color: #dd0000;">	&lt;/div&gt;</span>
+<span style="color: #dd0000;">	"""</span>
+<span style="color: #000000;">	</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;div id="cervobox"&gt;&lt;/div&gt;'</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;/body&gt;&lt;/html&gt;"</span>
+<span style="color: #000000;">sess.close</span><span style="color: #ff00ff;">()</span>
+
+</pre></body>
+</html>

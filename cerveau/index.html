@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+  
+  <meta content="text/html; charset=utf-8" http-equiv="content-type">
+
+
+  
+  <link href="eliziastyle.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-19440362-1']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
+
+  
+  <title>code source</title>
+</head>
+
+
+<body>
+
+
+<h2 style="font-weight: normal;"><span style="font-family: Arial Black;">Des
+informations sur ElizIA</span></h2>
+
+
+<span style="font-family: Arial Black;"><a href="http://elizia.net/">ElizIA</a> est une version
+fran&ccedil;aise d'Eliza de <a target="_blank" href="http://en.wikipedia.org/wiki/Joseph_Weizenbaum">Joseph
+Weizenbaum</a>, un logiciel simulant un
+psychoth&eacute;rapeute rog&eacute;rien. Voici quelques
+information sur l'histoire d'Eliza: <a href="http://fr.wikipedia.org/wiki/ELIZA" target="_blank">L'entr&eacute;e
+d'Eliza dans la Wikip&eacute;dia fran&ccedil;aise</a> ou <a href="http://en.wikipedia.org/wiki/ELIZA" target="_blank">anglaise</a>
+o&ugrave;
+vous trouvez aussi de nombreux liens vers des Elizas en anglais.<br>
+
+
+<br>
+
+
+Ce logiciel est &eacute;crit en <a href="http://www.python.org/" target="_blank">Python</a>. C'est un logiciel libre,
+sous <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GNU GPL</a>. Voici une <a href="http://fsffrance.org/gpl/gpl-fr.fr.html">traduction
+inofficielle de la GPL en fran&ccedil;ais</a>. <br>
+
+
+<br>
+
+
+</span>
+Voici le vieux code source de quelques scripts utilils&eacute;s (demandez-<a href="http://gerdes.fr">moi</a> la dernière version):
+<ul>
+
+
+  <li>Le
+script qui cr&eacute;e la page Web : <a href="elizia.html">index.cgi</a></li>
+
+
+  <li>L'analyste
+(le script central) : <a href="analyste.html">analyste.py</a></li>
+
+
+  <li>Le
+linguiste (s'occupe de la flexion et du retournement des phrases) : <a href="frenchLinguist.html">frenchLinguist.py</a></li>
+
+
+  <li>La
+base de donn&eacute;es (acc&egrave;s au verbes dans une base
+MySQL) : <a href="lefffDB.html">lefffDB.py</a></li>
+
+
+  <li>Mr.
+Rogers (stockage des mots cl&eacute;s et des r&eacute;ponses) :
+    <a href="rogers.html">rogers.py</a></li>
+
+
+  <li>La
+supervision (cr&eacute;e la page pour am&eacute;liorer Eliza) :
+    <a href="supervision.html">supervision.py</a></li>
+
+
+  <li>Le
+script qui affiche l'historique des diff&eacute;rentes
+th&eacute;rapies : <a href="histoire.html">histoire.py
+    </a></li>
+
+
+</ul>
+
+
+Pour l'installation, vous avez besoin d'un serveur Apache acceptant des
+script cgi en python et d'un serveur MySQL. <span style="font-family: monospace;"></span>Voici un <a href="Elizia.tar.gz">paquet complet zipp&eacute; d'Elizia</a>
+avec tous les fichiers.<br>
+
+
+<small>D'abord, il faut copier le fichier du lefff dans la base
+des donn&eacute;es &agrave; l'aide du script lefffSetup.cgi. Toutes
+les adaptations n&eacute;cessaires &agrave; votre serveur (chemins,
+mots de passe, ...) se trouvent au d&eacute;but des fichiers.</small><span style="font-family: Arial Black;"><br>
+
+
+<br>
+
+
+Le
+calcul de la flexion des verbes se fait avec une ancienne version du <a target="_blank" href="http://www.labri.fr/perso/clement/lefff/">Lefff</a>,
+cr&eacute;e par Lionel Cl&eacute;ment et Beno&icirc;t Sagot.<br>
+Elizia sait
+<ul>
+  <li>Trouver des lemmes des mots et il suffit donc de donner les lemes en tant que mots cl&eacute;s.</li>
+
+
+  <li>R&eacute;agir au tutoiement.</li>
+  
+    <li>pour certains cas, extraire automatiquement le sexe gr&acirc;ce
+&agrave; des phrase comme "je suis heureuse" / "je suis heureux"</li>
+
+</ul>
+<br>
+
+
+Ce logiciel est le r&eacute;sultat de cours d'initiation au
+langage Python pour des linguistes &agrave; <a href="http://www.u-bordeaux3.fr/" target="_blank">l'Universit&eacute;
+Michel Montaigne Bordeaux 3</a>&nbsp;et de cours du
+m&ecirc;me type &agrave; la <a href="http://www.univ-paris3.fr/" target="_blank">Sorbonne
+Nouvelle, Paris 3</a>. </span><small>Les
+&eacute;tudiants qui ont
+contribu&eacute; &agrave; rendre Elizia ce qu'elle est
+aujourd'hui sont : &agrave; Bordeaux 3 : Ouassem Nkhili, Christelle Rouet, Graziella Couasnon, Marion Labeyrie, Corinne Charpentier,
+Sandrine Dejeans, Rania Aidi, C&eacute;cile Berger, Amel Ahmiad, Salvia Bonnaire ; et &agrave; Paris 3 : Vana Kelijian,&nbsp;Charl&egrave;ne
+Dufier, Oifa Laidouni, Sonia Azirou, Eug&eacute;nia Pinheiro, Sidonie Désir, Claudia Bedin (liste &agrave; compléter)</small><br>
+
+
+<span style="font-family: Arial Black;"><br>
+
+
+<br>
+
+
+Il reste beaucoup de choses &agrave; faire. Ci-dessous quelques
+id&eacute;es. Si vous avez effectu&eacute; des
+am&eacute;liorations, merci de m'en informer : kim AT gerdes.fr</span><br>
+
+
+<ul>
+
+
+
+
+
+  <li>engager une conversation qui permet de conna&icirc;tre</li>
+
+
+  
+  <ul>
+
+
+    <li>le nom,</li> <li> le sexe, </li> <li>l'&acirc;ge</li> du patient
+
+
+
+  
+  </ul>
+
+
+  <li>beaucoup de cas sp&eacute;cifiques</li>
+
+
+  <li>Am&eacute;liorer l'acc&egrave;s au
+m&eacute;moire des anciens dialogues. Pour l'instant c'est
+tr&egrave;s mal fait...</li>
+
+
+  <li>...</li>
+
+
+</ul>
+
+
+<div id="bottombox"><a href="http://elizia.net">Retour
+vers ElizIA</a>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<a href="../supervision.cgi">La supervision</a>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<a href="../regex/">Un
+exercice sur les expressions r&eacute;guli&egrave;res</a>
+</div>
+
+
+<div id="cervobox"></div>
+
+
+</body>
+</html>

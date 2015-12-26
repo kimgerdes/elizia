@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Generator" content="Kate, the KDE Advanced Text Editor" />
+<title>histoire.cgi</title>
+</head>
+<body>
+<pre>
+<span style="font-style: italic;color: #808080;">#!/usr/bin/python</span>
+<span style="font-style: italic;color: #808080;"># -*- coding: iso-8859-1 -*-</span>
+
+<span style="font-style: italic;color: #808080;">####</span>
+<span style="font-style: italic;color: #808080;"># Copyright (C) 2006, 2007 Kim Gerdes</span>
+<span style="font-style: italic;color: #808080;"># kim AT gerdes.fr</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># This program is free software; you can redistribute it and/or</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># modify it under the terms of the GNU General Public License</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># as published by the Free Software Foundation; either version 2</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># of the License, or (at your option) any later version.</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># This script is distributed in the hope that it will be useful,</span>
+<span style="font-style: italic;color: #808080;"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="font-style: italic;color: #808080;"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE</span>
+<span style="font-style: italic;color: #808080;"># See the GNU General Public License (www.gnu.org) for more details.</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># You can retrieve a copy of the GNU General Public License</span>
+<span style="font-style: italic;color: #808080;"># from http://www.gnu.org/.  For a copy via US Mail, write to the</span>
+<span style="font-style: italic;color: #808080;">#     Free Software Foundation, Inc.</span>
+<span style="font-style: italic;color: #808080;">#     59 Temple Place - Suite 330,</span>
+<span style="font-style: italic;color: #808080;">#     Boston, MA  02111-1307</span>
+<span style="font-style: italic;color: #808080;">#     USA</span>
+<span style="font-style: italic;color: #808080;">####</span>
+
+
+<span style="color: #ff00ff;">import</span><span style="color: #000000;"> time, re, cgitb, cgi,sha, Cookie, os,sys,shelve</span>
+<span style="color: #000000;">cgitb.enable</span><span style="color: #ff00ff;">()</span>
+<span style="color: #ff00ff;">import</span><span style="color: #000000;"> session</span>
+
+<span style="color: #000000;">machine </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"elizia.net"</span>
+<span style="color: #000000;">cefichier </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"histoire.cgi"</span>
+<span style="color: #000000;">stylesheet </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"/eliziastyle.css"</span><span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># avec chemin depuis machine</span>
+
+
+
+
+<span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> Walk</span><span style="color: #ff00ff;">(</span><span style="color: #000000;"> root, recurse</span><span style="color: #ff00ff;">=</span><span style="color: #0000ff;">0</span><span style="color: #000000;">, pattern</span><span style="color: #ff00ff;">=</span><span style="color: #dd0000;">'*'</span><span style="color: #000000;">, return_folders</span><span style="color: #ff00ff;">=</span><span style="color: #0000ff;">0</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">	</span><span style="color: #ff00ff;">import</span><span style="color: #000000;"> fnmatch, os, string</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;"># initialize</span>
+<span style="color: #000000;">	result </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">[]</span>
+
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;"># must have at least root folder</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">try</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		names </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> os.listdir</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">root</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">except</span><span style="color: #000000;"> os.error</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> result</span>
+
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;"># expand pattern</span>
+<span style="color: #000000;">	pattern </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> pattern </span><span style="font-weight: bold;color: #000000;">or</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'*'</span>
+<span style="color: #000000;">	pat_list </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> string.splitfields</span><span style="color: #ff00ff;">(</span><span style="color: #000000;"> pattern , </span><span style="color: #dd0000;">';'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;"># check each file</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> name </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> names</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		fullname </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> os.path.normpath</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">os.path.join</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">root, name</span><span style="color: #ff00ff;">))</span>
+
+<span style="color: #000000;">		</span><span style="font-style: italic;color: #808080;"># grab if it matches our pattern and entry type</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> pat </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> pat_list</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> fnmatch.fnmatch</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">name, pat</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> os.path.isfile</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">fullname</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">or</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">(</span><span style="color: #000000;">return_folders </span><span style="font-weight: bold;color: #000000;">and</span><span style="color: #000000;"> os.path.isdir</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">fullname</span><span style="color: #ff00ff;">)):</span>
+<span style="color: #000000;">					result.append</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">fullname</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">continue</span>
+<span style="color: #000000;">				</span>
+<span style="color: #000000;">		</span><span style="font-style: italic;color: #808080;"># recursively scan other folders, appending results</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> recurse</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> os.path.isdir</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">fullname</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">and</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">not</span><span style="color: #000000;"> os.path.islink</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">fullname</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">				result </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> result </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> Walk</span><span style="color: #ff00ff;">(</span><span style="color: #000000;"> fullname, recurse, pattern, return_folders </span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">			</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> result</span>
+<span style="color: #000000;">			</span>
+<span style="color: #000000;">			</span>
+<span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> outputForRogers</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">cas,keywords,answers</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">	res </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"keywords['"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">cas</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">"'] = ["</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> key </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> keywords</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		res </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'"'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;">key</span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'", '</span>
+<span style="color: #000000;">	res </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> res</span><span style="color: #ff00ff;">[:-</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">]+</span><span style="color: #dd0000;">"]&lt;br&gt;"</span>
+<span style="color: #000000;">	res </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"answers['"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">cas</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">"'] = ["</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> ans </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> answers</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		res </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'"'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;">ans</span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'", '</span>
+<span style="color: #000000;">	res </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> res</span><span style="color: #ff00ff;">[:-</span><span style="color: #0000ff;">2</span><span style="color: #ff00ff;">]+</span><span style="color: #dd0000;">"]"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> res</span>
+
+
+
+
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Content-Type: text/html\n"</span><span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># blank line : end of headers</span>
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"""&lt;html&gt;</span>
+<span style="color: #dd0000;">	&lt;head&gt;&lt;title&gt; Histoire d'elizia &lt;/title&gt;&lt;META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1"&gt;</span>
+<span style="color: #dd0000;">	"""</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;">	</span><span style="color: #dd0000;">'&lt;link href="http://'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> machine </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> stylesheet</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">'" rel="stylesheet" type="text/css"&gt;&lt;/head&gt;'</span>
+
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;body &gt; &lt;h1&gt; L'histoire d'elizia &lt;/h1&gt;"</span>
+
+
+
+<span style="color: #000000;">files </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> Walk</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">os.environ</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">'DOCUMENT_ROOT'</span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'/session'</span><span style="color: #000000;">, </span><span style="color: #0000ff;">0</span><span style="color: #000000;">, </span><span style="color: #dd0000;">'sess*'</span><span style="color: #000000;">, </span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">)</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;h3&gt;Nous avons </span><span style="color: #ff00ff;">%s</span><span style="color: #dd0000;"> sessions de thérapie enregistrées:&lt;/h3&gt;'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">%</span><span style="color: #000000;"> </span><span style="color: #800000;">len</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">files</span><span style="color: #ff00ff;">)</span>
+
+
+<span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> file </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> files</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;hr&gt;&lt;br&gt;"</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	sid </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> file</span><span style="color: #ff00ff;">[-</span><span style="color: #0000ff;">40</span><span style="color: #ff00ff;">:]</span>
+<span style="color: #000000;">	data </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> shelve.</span><span style="color: #800000;">open</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">os.environ</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">'DOCUMENT_ROOT'</span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'/session'</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">'/sess_'</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> sid, writeback</span><span style="color: #ff00ff;">=</span><span style="color: #008000;">False</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	specialAnswers </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> data.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">'specialAnswers'</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;">#if not specialKeys :continue	</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> data.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">'firstvisit'</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;h4&gt;Session commencée le "</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">time.asctime</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.localtime</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">float</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"firstvisit"</span><span style="color: #ff00ff;">])))+</span><span style="color: #dd0000;">"&lt;/h4&gt;"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"ipnum"</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> data.keys</span><span style="color: #ff00ff;">()</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;h4&gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"ipnum"</span><span style="color: #ff00ff;">]+</span><span style="color: #dd0000;">"&lt;/h4&gt;"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" --- "</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;">sid </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;br&gt;"</span><span style="color: #000000;">	</span>
+
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	specialKeys </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> data.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">'specialKeys'</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> specialAnswers </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> c </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> specialAnswers.keys</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;">  </span><span style="color: #dd0000;">"&lt;tr&gt;&lt;table style='border:thin solid red; border-spacing:5px ;font-size: small; empty-cells:show; width:100%'&gt;"</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;tr&gt;: : : "</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">c</span><span style="color: #ff00ff;">+</span><span style="color: #dd0000;">"&lt;/tr&gt;"</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;tr&gt;&lt;td&gt;'</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> c </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> specialKeys.keys</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;textarea name="keys" cols="30" rows="8" style=" font-size: x-small; height:100%; width:100%;"&gt;'</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> key </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> specialKeys</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">c</span><span style="color: #ff00ff;">]:</span>
+<span style="color: #000000;">					</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> key</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;/textarea&gt;'</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"cléfs spéciales"</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;/td&gt;&lt;td class='elizia'&gt;"</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;textarea name="answers" cols="80" rows="8" &gt;'</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> rep </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> specialAnswers</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">c</span><span style="color: #ff00ff;">]:</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> rep</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;/textarea&gt;&lt;/td&gt;&lt;/tr&gt;'</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;tr&gt;&lt;td colspan="2" &gt;'</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> c </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> specialKeys.keys</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p style='font-size: xx-small; color:grey;'&gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">outputForRogers</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">c,specialKeys</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">c</span><span style="color: #ff00ff;">]</span><span style="color: #000000;">,specialAnswers</span><span style="color: #ff00ff;">[</span><span style="color: #000000;">c</span><span style="color: #ff00ff;">])+</span><span style="color: #dd0000;">"&lt;/p&gt;"</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;/td&gt;&lt;/tr&gt;'</span>
+<span style="color: #000000;">			</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;/table&gt;&lt;/tr&gt;'</span>
+<span style="color: #000000;">			</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;">  </span><span style="color: #dd0000;">"&lt;table style='border:thin solid red; border-spacing:10px ; empty-cells:show; width:100%'&gt;"</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"memoireReponses"</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> data.keys</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> i </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> </span><span style="color: #800000;">range</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">len</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireReponses"</span><span style="color: #ff00ff;">])):</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;tr &gt;&lt;td class='tech' style='width:115px'&gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">time.asctime</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">time.localtime</span><span style="color: #ff00ff;">(</span><span style="color: #800000;">float</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireTemps"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">])))</span><span style="color: #000000;">,</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" : &lt;/td&gt;&lt;td&gt;&lt;span class='vous' &gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireinputsPatient"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]+</span><span style="color: #dd0000;">"&lt;/span&gt; &lt;/td&gt;&lt;td&gt; &lt;span class='elizia'&gt;"</span><span style="color: #000000;">,</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireReponses"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]</span><span style="color: #000000;">,</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;td class='tech' style='width:77px'&gt;"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;">data</span><span style="color: #ff00ff;">[</span><span style="color: #dd0000;">"memoireCas"</span><span style="color: #ff00ff;">][</span><span style="color: #000000;">i</span><span style="color: #ff00ff;">]+</span><span style="color: #dd0000;">"&lt;/td&gt;&lt;/tr&gt;"</span>
+
+
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;/table&gt;"</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;P&gt; &lt;/p&gt;"</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;div class="tech"&gt;'</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p&gt;&lt;b&gt;&lt;u&gt;trucs techniques :&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;"</span>
+
+
+
+
+
+
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p&gt;&lt;b&gt;Referer:&lt;/b&gt;"</span><span style="color: #000000;">, os.environ.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"HTTP_REFERER"</span><span style="color: #000000;">, </span><span style="color: #dd0000;">"&lt;not present&gt;"</span><span style="color: #ff00ff;">)</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p&gt;&lt;b&gt;User Agent:&lt;/b&gt;"</span><span style="color: #000000;">, os.environ.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"HTTP_USER_AGENT"</span><span style="color: #000000;">, </span><span style="color: #dd0000;">"&lt;unknown&gt;"</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">ipnum </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> os.environ.get</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"REMOTE_ADDR"</span><span style="color: #000000;">, </span><span style="color: #dd0000;">"&lt;not present&gt;"</span><span style="color: #ff00ff;">)</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;p&gt;&lt;b&gt;IP:&lt;/b&gt;"</span><span style="color: #000000;">, ipnum</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'&lt;/div&gt;'</span>
+<span style="font-weight: bold;color: #000000;">print</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"&lt;/body&gt;&lt;/html&gt;"</span>
+
+
+</pre></body>
+</html>

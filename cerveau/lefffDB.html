@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Generator" content="Kate, the KDE Advanced Text Editor" />
+<title>lefffDB.py</title>
+</head>
+<body>
+<pre>
+<span style="font-style: italic;color: #808080;">#!/usr/bin/python</span>
+<span style="font-style: italic;color: #808080;"># -*- coding: iso-8859-1 -*-</span>
+
+<span style="font-style: italic;color: #808080;">####</span>
+<span style="font-style: italic;color: #808080;"># Copyright (C) 2006, 2007 Kim Gerdes</span>
+<span style="font-style: italic;color: #808080;"># kim AT gerdes.fr</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># This program is free software; you can redistribute it and/or</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># modify it under the terms of the GNU General Public License</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># as published by the Free Software Foundation; either version 2</span>
+<span style="color: #000000;"> </span><span style="font-style: italic;color: #808080;"># of the License, or (at your option) any later version.</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># This script is distributed in the hope that it will be useful,</span>
+<span style="font-style: italic;color: #808080;"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="font-style: italic;color: #808080;"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE</span>
+<span style="font-style: italic;color: #808080;"># See the GNU General Public License (www.gnu.org) for more details.</span>
+<span style="font-style: italic;color: #808080;">#</span>
+<span style="font-style: italic;color: #808080;"># You can retrieve a copy of the GNU General Public License</span>
+<span style="font-style: italic;color: #808080;"># from http://www.gnu.org/.  For a copy via US Mail, write to the</span>
+<span style="font-style: italic;color: #808080;">#     Free Software Foundation, Inc.</span>
+<span style="font-style: italic;color: #808080;">#     59 Temple Place - Suite 330,</span>
+<span style="font-style: italic;color: #808080;">#     Boston, MA  02111-1307</span>
+<span style="font-style: italic;color: #808080;">#     USA</span>
+<span style="font-style: italic;color: #808080;">####</span>
+
+<span style="color: #ff00ff;">import</span><span style="color: #000000;"> re, cgitb, cgi, MySQLdb</span>
+<span style="color: #000000;">cgitb.enable</span><span style="color: #ff00ff;">()</span>
+
+
+<span style="color: #000000;">Elizahost </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Elizahost"</span>
+<span style="color: #000000;">Elizauser </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Elizauser"</span>
+<span style="color: #000000;">Elizapasswd </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Elizapasswd"</span>
+<span style="color: #000000;">Elizadb </span><span style="color: #ff00ff;">=</span><span style="color: #dd0000;">"Elizadb"</span>
+<span style="color: #000000;">lefffile </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">'/path/to/e/l/i/elizia/www/montablefff.txt'</span>
+
+
+<span style="font-weight: bold;color: #000000;">class</span><span style="color: #000000;"> Lefff</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">    </span><span style="font-style: italic;color: #808080;">""" cette classe gère tout ce qui a voir avec le lefff :</span>
+<span style="font-style: italic;color: #808080;">    la lecture du fichier,</span>
+<span style="font-style: italic;color: #808080;">    la création d'index</span>
+<span style="font-style: italic;color: #808080;">    la recherche dans les différents dictionnaires interne</span>
+<span style="font-style: italic;color: #808080;">    """</span>
+<span style="color: #000000;">    </span><span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> connect</span><span style="color: #ff00ff;">(</span><span style="color: #008000;">self</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">    	messageText </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Database Status: "</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">try</span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> </span>
+<span style="color: #000000;">		</span><span style="font-style: italic;color: #808080;">#self.connection = MySQLdb.connect(host="localhost", user="eliza", passwd="eliza", db="lefff" ) </span>
+<span style="color: #000000;">		</span>
+<span style="color: #000000;">		</span><span style="color: #008000;">self</span><span style="color: #000000;">.connection </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> MySQLdb.connect</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">host</span><span style="color: #ff00ff;">=</span><span style="color: #000000;">Elizahost, user</span><span style="color: #ff00ff;">=</span><span style="color: #000000;">Elizauser, passwd</span><span style="color: #ff00ff;">=</span><span style="color: #000000;">Elizapasswd, db</span><span style="color: #ff00ff;">=</span><span style="color: #000000;">Elizadb </span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span>
+<span style="color: #000000;">		</span>
+<span style="color: #000000;">		</span><span style="font-style: italic;color: #808080;">#self.connection.charset="latin1"</span>
+<span style="color: #000000;">		</span><span style="color: #008000;">self</span><span style="color: #000000;">.cursor </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #008000;">self</span><span style="color: #000000;">.connection.cursor</span><span style="color: #ff00ff;">()</span><span style="color: #000000;"> </span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">except</span><span style="color: #000000;"> MySQLdb.OperationalError, message</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		messageText </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #800000;">str</span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"Error </span><span style="color: #ff00ff;">%d</span><span style="color: #dd0000;">:\n</span><span style="color: #ff00ff;">%s</span><span style="color: #dd0000;">"</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">%</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">(</span><span style="color: #000000;">message</span><span style="color: #ff00ff;">[</span><span style="color: #000000;"> </span><span style="color: #0000ff;">0</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">]</span><span style="color: #000000;">, message</span><span style="color: #ff00ff;">[</span><span style="color: #000000;"> </span><span style="color: #0000ff;">1</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">))</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">else</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		messageText </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"Houray, I'm connected!"</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> messageText</span>
+
+
+
+<span style="color: #000000;">    </span><span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> lookupDico</span><span style="color: #ff00ff;">(</span><span style="color: #008000;">self</span><span style="color: #000000;">,forme</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;">""" chercher le mot 'forme' dans le dico</span>
+<span style="font-style: italic;color: #808080;">        """</span>
+<span style="color: #000000;">        infos</span><span style="color: #ff00ff;">=[]</span>
+<span style="color: #000000;">	forme </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">unicode</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">forme,</span><span style="color: #dd0000;">"iso-8859-1"</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">	</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="color: #008000;">self</span><span style="color: #000000;">.cursor</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">		</span><span style="color: #008000;">self</span><span style="color: #000000;">.cursor.execute </span><span style="color: #ff00ff;">(</span><span style="color: #dd0000;">"SELECT lemma, code FROM verbes WHERE form='"</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> forme </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"'"</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">		</span><span style="font-weight: bold;color: #000000;">while</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">(</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">			row </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #008000;">self</span><span style="color: #000000;">.cursor.fetchone </span><span style="color: #ff00ff;">()</span>
+<span style="color: #000000;">			</span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> row </span><span style="color: #ff00ff;">==</span><span style="color: #000000;"> </span><span style="color: #008000;">None</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">				</span><span style="font-weight: bold;color: #000000;">break</span>
+<span style="color: #000000;">			infos</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">:</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">]=[</span><span style="color: #000000;">row</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> infos</span>
+
+
+<span style="color: #000000;">    </span><span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> contientVerbe</span><span style="color: #ff00ff;">(</span><span style="color: #008000;">self</span><span style="color: #000000;">,liste</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> mot </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> liste </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="color: #008000;">self</span><span style="color: #000000;">.lookupDico</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">mot</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">!=</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">[]</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">                </span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> </span><span style="color: #008000;">True</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> </span><span style="color: #008000;">False</span>
+
+<span style="color: #000000;">    </span><span style="font-weight: bold;color: #000000;">def</span><span style="color: #000000;"> changePersonne</span><span style="color: #ff00ff;">(</span><span style="color: #008000;">self</span><span style="color: #000000;">,verbe,anciennePersonne,nouvellePersonne,</span>
+<span style="color: #000000;">                        pluriel</span><span style="color: #ff00ff;">=</span><span style="color: #008000;">True</span><span style="color: #000000;">,indicative</span><span style="color: #ff00ff;">=</span><span style="color: #008000;">True</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;">""" prend un verbe comme entrée,</span>
+<span style="font-style: italic;color: #808080;">            et rend la meme forme Ã  la nouvelle personne.</span>
+<span style="font-style: italic;color: #808080;">            On préfère le pluriel.</span>
+<span style="font-style: italic;color: #808080;">            Si on a le choix entre indicative et subjonctive,</span>
+<span style="font-style: italic;color: #808080;">            on prÃ©fÃ¨re l'indicative, sauf si la variable 'indicative' est mise</span>
+<span style="font-style: italic;color: #808080;">            Ã  'False'</span>
+<span style="font-style: italic;color: #808080;">        """</span>
+<span style="color: #000000;">        codeMode</span><span style="color: #ff00ff;">=</span><span style="color: #dd0000;">""</span>
+<span style="color: #000000;">        personne</span><span style="color: #ff00ff;">=</span><span style="color: #dd0000;">""</span>
+<span style="color: #000000;">        lemme</span><span style="color: #ff00ff;">=</span><span style="color: #dd0000;">""</span>
+<span style="color: #000000;">        infos </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #008000;">self</span><span style="color: #000000;">.lookupDico</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">verbe</span><span style="color: #ff00ff;">)</span>
+
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># s'il ne connait pas le verbe, alors on le laisse tel quel.</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> infos </span><span style="color: #ff00ff;">==</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">[]:</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> verbe</span>
+
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># essayons de trouver les bons codes pour la personne recherchÃ©e</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> info </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> infos</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> </span><span style="color: #800000;">str</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">anciennePersonne</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> info</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">                </span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> c </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> info</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">]:</span>
+<span style="color: #000000;">                    </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> c.isdigit</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">                        </span><span style="font-weight: bold;color: #000000;">break</span>
+<span style="color: #000000;">                    codeMode</span><span style="color: #ff00ff;">+=</span><span style="color: #000000;">c</span>
+<span style="color: #000000;">                personne </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> info</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">][-</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">                lemme </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> info</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">]</span>
+
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># si je ne trouve pas la bonne personne, je prend les codes</span>
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># de la 1Ã¨re info dans la liste.</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> codeMode</span><span style="color: #ff00ff;">==</span><span style="color: #dd0000;">""</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">for</span><span style="color: #000000;"> c </span><span style="font-weight: bold;color: #000000;">in</span><span style="color: #000000;"> infos</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">][</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">]:</span>
+<span style="color: #000000;">                    </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> c.isdigit</span><span style="color: #ff00ff;">():</span>
+<span style="color: #000000;">                        </span><span style="font-weight: bold;color: #000000;">break</span>
+<span style="color: #000000;">                    codeMode</span><span style="color: #ff00ff;">+=</span><span style="color: #000000;">c</span>
+<span style="color: #000000;">            personne </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> infos</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">][</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">][-</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">            lemme </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> infos</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">][</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">]</span>
+
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># cas spÃ©cial de forme identique indicative et subjonctive</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> codeMode </span><span style="color: #ff00ff;">==</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"PS"</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> indicative </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> codeMode </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"P"</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> codeMode </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"S"</span>
+
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># cas spÃ©cial de passage au pluriel de politesse</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> pluriel</span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> personne </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"p"</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">else</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">:</span><span style="color: #000000;"> personne </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"s"</span>
+
+<span style="color: #000000;">	lemme </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #800000;">unicode</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">lemme,</span><span style="color: #dd0000;">"iso-8859-1"</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">        marecherche </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"SELECT form FROM verbes WHERE lemma='"</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> lemme </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"'"</span>
+<span style="color: #000000;">        marecherche </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" AND code LIKE '%"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> codeMode </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"%'"</span>
+<span style="color: #000000;">        marecherche </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" AND code LIKE '%"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #800000;">str</span><span style="color: #ff00ff;">(</span><span style="color: #000000;">nouvellePersonne</span><span style="color: #ff00ff;">)</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"%'"</span>
+<span style="color: #000000;">        marecherche </span><span style="color: #ff00ff;">+=</span><span style="color: #000000;"> </span><span style="color: #dd0000;">" AND code LIKE '%"</span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> personne </span><span style="color: #ff00ff;">+</span><span style="color: #000000;"> </span><span style="color: #dd0000;">"%'"</span>
+<span style="color: #000000;">	</span><span style="font-style: italic;color: #808080;">#print "===&lt;br&gt;"+marecherche.encode('iso-8859-1')+"&lt;br&gt;"</span>
+<span style="color: #000000;">        </span><span style="color: #008000;">self</span><span style="color: #000000;">.cursor.execute </span><span style="color: #ff00ff;">(</span><span style="color: #000000;">marecherche</span><span style="color: #ff00ff;">)</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">while</span><span style="color: #000000;"> </span><span style="color: #ff00ff;">(</span><span style="color: #0000ff;">1</span><span style="color: #ff00ff;">):</span>
+<span style="color: #000000;">            row </span><span style="color: #ff00ff;">=</span><span style="color: #000000;"> </span><span style="color: #008000;">self</span><span style="color: #000000;">.cursor.fetchone </span><span style="color: #ff00ff;">()</span>
+<span style="color: #000000;">	    </span><span style="font-style: italic;color: #808080;">#print "***"+str(row)+"***&lt;br&gt;"</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">if</span><span style="color: #000000;"> row </span><span style="color: #ff00ff;">==</span><span style="color: #000000;"> </span><span style="color: #008000;">None</span><span style="color: #ff00ff;">:</span>
+<span style="color: #000000;">                </span><span style="font-weight: bold;color: #000000;">break</span>
+<span style="color: #000000;">            </span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> row</span><span style="color: #ff00ff;">[</span><span style="color: #0000ff;">0</span><span style="color: #ff00ff;">]</span>
+<span style="color: #000000;">        </span><span style="font-style: italic;color: #808080;"># rien trouvÃ©, je rends le verbe tel quel</span>
+<span style="color: #000000;">        </span><span style="font-weight: bold;color: #000000;">return</span><span style="color: #000000;"> verbe</span>
+</pre></body>
+</html>

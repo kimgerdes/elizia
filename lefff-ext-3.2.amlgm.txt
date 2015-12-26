@@ -1,0 +1,196 @@
+#############################################################
+# déclaration des amalgames
+# éclatement des mots amalgamés
+#############################################################
+
+du	de__prep le__det
+des	de__prep les__det
+duquel	de__prep lequel
+dudit	de__prep ledit
+desdits	de__prep lesdits
+desquels	de__prep lesquels
+desquelles	de__prep lesquelles
+au	à__prep le__det
+aux	à__prep les__det
+jusqu'au	jusqu'à le__det
+jusqu'aux	jusqu'à les__det
+auquel	à__prep lequel
+auxquels	à__prep lesquels
+auxquelles	à__prep lesquelles
+ès	en__prep les__det
+s'il	si__csu il
+s'ils	si__csu ils
+auxdites	à__prep les__det dites__adj
+audit	à__prep le__det dites__adj
+desdites	de__prep les__det dites__adj
+dudit	de__prep le__det dites__adj
+
+### amalgames pour le langage écrit familier (easy+MB)
+ailleur	ailleurs
+amèliorer	améliorer
+anon	ah non
+apres	après
+aprés	après
+ariv	arrive
+arret	arrêt
+arreté	arrêté
+auzotre	à les__det autres
+avanse	avance
+avé	avait
+biensur	bien_sûr
+bientot	bientôt
+bjr	bonjour
+c'que	ce que
+cd	CD
+cdlmt	cordialement
+celà	cela
+cest	c' est
+ch'fai	je fais
+ch'peu	je peux
+chespère	j' espère
+chfai	je fais
+chfais	je fais
+chfé	je fais
+chlavé	je l' avais
+chpeu	je peux
+chpeux	je peux
+chpourai	je pourrai
+chpourai	je pourrais
+chpourais	je pourrais
+chpouré	je pourrai
+chpouré	je pourrais
+chpréfère	je préfère
+chpréféreré	je préférerais
+cht'	j' t'
+chtai	je t' ai
+chte	j' te
+chtravaille	je travaille
+chtrouve	je trouve
+chui	je suis
+chuis	je suis
+chépa	je sais pas
+chépas	je sais pas
+cmme	comme
+connaitre	connaître
+copin	copain
+coute	coûte
+cque	c' est que
+cquoi	c' est quoi
+creer	créer
+ct	c' était
+ctaprèm	cet après-midi
+cvous	c' est vous
+cépamafôt	c' est pas ma faute
+cété	c' était
+dailleur	d'ailleurs
+decembre	décembre
+deja	déjà
+derniere	dernière
+desactiver	désactiver
+devé	devait
+déja	déjà
+envi	envie
+etais	étais
+etre	être
+fé	fait
+fé	il fait
+fé	ça fait
+fô	il faut
+grace	grâce
+grd	grand
+hopital	hôpital
+inquiete	inquiète
+jai	j' ai
+jamé	jamais
+jariveré	j' arriverai
+jariveré	j' arriverais
+jaten	j' attends
+javou	j' avoue
+javé	j' avais
+jen	j' en
+jespère	j' espère
+jla	j' la
+jle	j' le
+jles	j' les
+jme	j' me
+jmetrai	je mettrai
+jsui	j' suis
+jsui	je suis
+jsuis	j' suis
+jsuis	je suis
+jtavé	j' t' avais
+jte	j' te
+jte	je te
+juska	jusqu' à
+jv	j' y vais
+jvé	je vais
+jysui	j' y suis
+ke	que
+kelle	qu' elle
+kestufou	qu'_est_-ce_que tu fous
+ki	qui
+kiffe	adore
+koi	quoi
+kom	comme
+kwâ	quoi
+lamour	l' amour
+legumes	légumes
+lfére	le faire
+liscense	license
+mainan	mais nan
+maitrisée	maîtrisée
+mar	marre
+medecin	médecin
+meme	même
+moin	moins
+mé	mais
+navon	n' avons
+nou	nous
+oinche	ouinch
+pa	pas
+paskelle	parce_qu' elle
+paskil	parce_qu' il
+pasq	parce_qu'
+pcqil	parce_qu' il
+pdnt	pendant
+pere	père
+pillule	pilule
+premiere	première
+probleme	problème
+qa	qu' à
+qe	que
+qesa	que ça
+qi	qui
+qil	qu'il
+qoi	quoi
+quchui	que je suis
+regles	règles
+repondre	répondre
+resultats	résultats
+smaine	semaine
+stp	s'il_te_plaît
+succés	succès
+surement	sûrement
+svp	s'il_vous_plaît
+symptomes	symptômes
+tete	tête
+tinvite	t' invite
+tjr	toujours
+tjrs	toujours
+tkt	ne t' inquiète pas
+tora	tu auras
+tres	très
+trè	très
+tré	très
+trés	très
+tt	tout
+vacs	vacances
+veus	veux
+voila	voilà
+vré	vrais
+vrémen	vraiment
+y'a	il y a
+y'sfait	il se fait
+ya	il y a
+yaller	y aller
+quatre-vingts	quatre-vingt
